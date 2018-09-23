@@ -1,0 +1,72 @@
+/*
+Crie 4 variáveis com as características abaixo:
+
+Nome: Cliente. Tipo: Caracteres com 10 posições. Valor: João
+Nome: Idade. Tipo: Inteiro. Valor: 10
+Nome: DataNascimento. Tipo: Data. Valor: 10/01/2007
+Nome: Custo. Tipo: Número com casas decimais. Valor: 10,23
+*/
+
+		DECLARE @CLIENTE VARCHAR(10),@IDADE		INT, @DATANASC	DATE, @CUSTO	FLOAT
+			SET @CLIENTE ='JOÃO'
+			SET @IDADE	='10'
+			SET	@DATANASC='20070110'
+			SET @CUSTO = 10.23
+			
+		PRINT @CLIENTE
+		PRINT @IDADE
+		PRINT @DATANASC
+		PRINT	@CUSTO
+/*
+
+Crie uma variável chamada NUMNOTAS e atribua a ela o 
+número de notas fiscais do dia 01/01/2017. Mostre na saída do script o valor da variável.
+*/
+				DECLARE @NUMNOTAS		INT
+
+			SELECT @NUMNOTAS= COUNT(1) FROM [NOTAS FISCAIS] WHERE DATA='20170101'
+				PRINT @NUMNOTAS
+
+		
+/* BRINCANDO COM FUNÇÕES DE DATA */
+
+SELECT DATENAME(DAY,DATEADD(DAY,4,GETDATE())) --RETORNA O NUMERO DO DIA DO MESDATENAME(), DATEADD() ADICIONA NA DATA = 20 NO DIA DESSE SCRIPT ERA DIA 16
+SELECT DATENAME(WEEKDAY,GETDATE())			 -- RETORNA O NOME DO DIA	DA SEMANA	
+SELECT DATENAME(DAY,GETDATE())				 --RETORNA O NUMERO DO DIA
+SELECT DATENAME(MONTH,GETDATE())			 --RETORNA O NOME DO MÊS
+SELECT DATENAME(WEEK,DATEADD(WEEK,1,GETDATE())) --RETORNA O NUMERO DA SEMANA MAIS 1
+
+/* SCRIPT QUE RETORNA SE FINAL DE SEMANA OU NÃO */
+
+DECLARE @DIA_SEMANA VARCHAR(20), @NUMERO_DIA INT
+		SET @NUMERO_DIA = 0
+		SET	@DIA_SEMANA = DATENAME(WEEKDAY,DATEADD(DAY,@NUMERO_DIA,GETDATE()))
+	
+IF @DIA_SEMANA = 'DOMIMGO' OR @DIA_SEMANA = 'SABADO'
+	BEGIN
+		PRINT 'FINAL DE SEMANA ' + @DIA_SEMANA
+	END
+ELSE
+	BEGIN
+		PRINT 'DIA DE SEMANA ' + @DIA_SEMANA
+	END	
+
+	
+/*	
+Crie um script que, baseado em uma data, conte o número de notas fiscais. Se houver mais de 70 notas, 
+exiba a mensagem "Muita nota". Se não, exiba a mensagem "Pouca nota". Exiba também o número de notas
+*/	
+DECLARE @DATA		DATE,
+		@QTDE_NOTAS	INT
+		SET @DATA='20170110'
+SET @QTDE_NOTAS = (SELECT COUNT(1) FROM [NOTAS FISCAIS] WHERE DATA=@DATA)
+
+
+IF @QTDE_NOTAS > 70
+	BEGIN
+		PRINT 'MUITAS NOTAS NESSE DIA '+UPPER(CONVERT(CHAR(4),@QTDE_NOTAS))
+	END
+ELSE
+	BEGIN
+		PRINT 'POUCAS NOTAS NESSE DIA '+UPPER(CONVERT(CHAR(4),@QTDE_NOTAS))
+	END
